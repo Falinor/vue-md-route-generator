@@ -1,11 +1,13 @@
 {
-  "name": "vue-route-generator",
-  "version": "0.4.3",
-  "author": "katashin",
-  "description": "Vue Router route config generator",
+  "name": "vue-md-route-generator",
+  "version": "0.0.1",
+  "author": "Falinor",
+  "description": "Vue Router route generator based on markdown arborescence",
   "keywords": [
     "Vue",
     "Vue Router",
+    "markdown",
+    "md",
     "routing",
     "generator"
   ],
@@ -15,11 +17,11 @@
   "files": [
     "lib"
   ],
-  "homepage": "https://github.com/ktsn/vue-route-generator",
-  "bugs": "https://github.com/ktsn/vue-route-generator/issues",
+  "homepage": "https://github.com/Falinor/vue-md-route-generator",
+  "bugs": "https://github.com/Falinor/vue-md-route-generator/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ktsn/vue-route-generator.git"
+    "url": "https://github.com/Falinor/vue-md-route-generator.git"
   },
   "scripts": {
     "prepublishOnly": "npm run clean && npm run test && npm run build",
@@ -62,6 +64,7 @@
   },
   "dependencies": {
     "fast-glob": "^3.0.4",
+    "gray-matter": "^4.0.2",
     "prettier": "1.19.1"
   },
   "peerDependencies": {
