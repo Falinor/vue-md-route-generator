@@ -8,7 +8,7 @@ function createChildrenRoute(children: PageMeta[]): string {
 function createRoute(meta: PageMeta): string {
   const children = !meta.children ? '' : createChildrenRoute(meta.children)
 
-  // If default child is exists, the route should not have a name.
+  // If default child exists, the route should not have a name.
   const routeName =
     meta.children && meta.children.some(m => m.path === '')
       ? ''

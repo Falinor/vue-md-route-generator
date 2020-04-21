@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as fg from 'fast-glob'
+
 import { createRoutes } from './template/routes'
 import { resolveRoutePaths } from './resolve'
 

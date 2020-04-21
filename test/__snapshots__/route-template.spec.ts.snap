@@ -2,10 +2,10 @@
 
 exports[`Route template should configure chunk name prefix 1`] = `
 "function Foo() {
-  return import(/* webpackChunkName: \\"page-foo\\" */ '@/pages/foo.vue')
+  return import(/* webpackChunkName: \\"page-foo\\" */ '@/assets/foo.md')
 }
 function Bar() {
-  return import(/* webpackChunkName: \\"page-bar\\" */ '@/pages/bar.vue')
+  return import(/* webpackChunkName: \\"page-bar\\" */ '@/assets/bar.md')
 }
 
 export default [
@@ -25,13 +25,13 @@ export default [
 
 exports[`Route template should generate nested routes 1`] = `
 "function Foo() {
-  return import(/* webpackChunkName: \\"foo\\" */ '@/pages/foo.vue')
+  return import(/* webpackChunkName: \\"foo\\" */ '@/assets/foo.md')
 }
 function FooBar() {
-  return import(/* webpackChunkName: \\"bar\\" */ '@/pages/bar.vue')
+  return import(/* webpackChunkName: \\"bar\\" */ '@/assets/bar.md')
 }
 function FooBaz() {
-  return import(/* webpackChunkName: \\"baz\\" */ '@/pages/baz.vue')
+  return import(/* webpackChunkName: \\"baz\\" */ '@/assets/baz.md')
 }
 
 export default [
@@ -57,7 +57,7 @@ export default [
 `;
 
 exports[`Route template should generate route meta 1`] = `
-"import Foo from '@/pages/foo.vue'
+"import Foo from '@/assets/foo.md'
 
 export default [
   {
@@ -74,10 +74,10 @@ export default [
 
 exports[`Route template should generate routes 1`] = `
 "function Foo() {
-  return import(/* webpackChunkName: \\"foo\\" */ '@/pages/foo.vue')
+  return import(/* webpackChunkName: \\"foo\\" */ '@/assets/foo.md')
 }
 function Bar() {
-  return import(/* webpackChunkName: \\"bar\\" */ '@/pages/bar.vue')
+  return import(/* webpackChunkName: \\"bar\\" */ '@/assets/bar.md')
 }
 
 export default [
@@ -96,8 +96,8 @@ export default [
 `;
 
 exports[`Route template should generate static import code 1`] = `
-"import Foo from '@/pages/foo.vue'
-import Bar from '@/pages/bar.vue'
+"import Foo from '@/assets/foo.md'
+import Bar from '@/assets/bar.md'
 
 export default [
   {
@@ -116,10 +116,10 @@ export default [
 
 exports[`Route template should not include name if the route has a default child 1`] = `
 "function Foo() {
-  return import(/* webpackChunkName: \\"foo\\" */ '@/pages/foo.vue')
+  return import(/* webpackChunkName: \\"foo\\" */ '@/assets/foo.md')
 }
 function FooIndex() {
-  return import(/* webpackChunkName: \\"foo-index\\" */ '@/pages/foo/index.vue')
+  return import(/* webpackChunkName: \\"foo-index\\" */ '@/pages/foo/index.md')
 }
 
 export default [

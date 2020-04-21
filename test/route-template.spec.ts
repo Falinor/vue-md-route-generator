@@ -9,14 +9,14 @@ describe('Route template', () => {
         specifier: 'Foo',
         path: '/foo',
         pathSegments: ['foo'],
-        component: '@/pages/foo.vue'
+        component: '@/assets/foo.md'
       },
       {
         name: 'bar',
         specifier: 'Bar',
         path: '/bar',
         pathSegments: ['bar'],
-        component: '@/pages/bar.vue'
+        component: '@/assets/bar.md'
       }
     ]
 
@@ -30,21 +30,21 @@ describe('Route template', () => {
         specifier: 'Foo',
         path: '/foo',
         pathSegments: ['foo'],
-        component: '@/pages/foo.vue',
+        component: '@/assets/foo.md',
         children: [
           {
             name: 'bar',
             specifier: 'FooBar',
             path: 'bar',
             pathSegments: ['foo', 'bar'],
-            component: '@/pages/bar.vue'
+            component: '@/assets/bar.md'
           },
           {
             name: 'baz',
             specifier: 'FooBaz',
             path: 'baz',
             pathSegments: ['foo', 'baz'],
-            component: '@/pages/baz.vue'
+            component: '@/assets/baz.md'
           }
         ]
       }
@@ -60,14 +60,14 @@ describe('Route template', () => {
         specifier: 'Foo',
         path: '/foo',
         pathSegments: ['foo'],
-        component: '@/pages/foo.vue'
+        component: '@/assets/foo.md'
       },
       {
         name: 'bar',
         specifier: 'Bar',
         path: '/bar',
         pathSegments: ['bar'],
-        component: '@/pages/bar.vue'
+        component: '@/assets/bar.md'
       }
     ]
 
@@ -81,7 +81,7 @@ describe('Route template', () => {
         specifier: 'Foo',
         path: '/foo',
         pathSegments: ['foo'],
-        component: '@/pages/foo.vue',
+        component: '@/assets/foo.md',
         routeMeta: {
           title: 'Hello'
         }
@@ -98,14 +98,14 @@ describe('Route template', () => {
         specifier: 'Foo',
         path: '/foo',
         pathSegments: ['foo'],
-        component: '@/pages/foo.vue'
+        component: '@/assets/foo.md'
       },
       {
         name: 'bar',
         specifier: 'Bar',
         path: '/bar',
         pathSegments: ['bar'],
-        component: '@/pages/bar.vue'
+        component: '@/assets/bar.md'
       }
     ]
 
@@ -119,14 +119,14 @@ describe('Route template', () => {
         specifier: 'Foo',
         path: '/foo',
         pathSegments: ['foo'],
-        component: '@/pages/foo.vue',
+        component: '@/assets/foo.md',
         children: [
           {
             name: 'foo-index',
             specifier: 'FooIndex',
             path: '',
             pathSegments: ['foo'],
-            component: '@/pages/foo/index.vue'
+            component: '@/pages/foo/index.md'
           }
         ]
       }
