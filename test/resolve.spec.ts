@@ -1,100 +1,49 @@
-import { resolveRoutePaths } from '../src/resolve'
+import { FileTree, resolveRoutePaths } from '../src/resolve'
 
 function mockReadFile(path: string): string {
-  if (path === 'meta.vue') {
-    return `<route-meta>
-    {
-      "title": "Hello"
-    }
-    </route-meta>`
+  if (path === 'meta.md') {
+    return `---
+title: Hello
+---`
   }
 
   if (path === 'invalid-meta.vue') {
-    return `<route-meta>
-    {
-      "invalid": "Test",
-    }
-    </route-meta>`
+    return `---
+{ invalid: Test }
+---`
   }
 
   return ''
 }
 
 describe('Route resolution', () => {
-  function test(name: string, paths: string[], nested: boolean = false): void {
+  function test(name: string, tree: FileTree): void {
     it(name, () => {
       expect(
-        resolveRoutePaths(paths, '@/pages/', nested, mockReadFile)
+        resolveRoutePaths(tree, '@/assets/', mockReadFile)
       ).toMatchSnapshot()
     })
   }
 
-  test('resolves routes', ['index.vue', 'foo.vue', 'baz.vue'])
-
-  test('resolves dynamic routes', ['users/_id.vue'])
-
-  test('resolves dynamic routes with multiple "."', ['user.register.vue'])
-
-  test('resolves dynamic routes with required param', ['users/_id/index.vue'])
-
-  test('resolves nested routes', ['foo.vue', 'foo/index.vue', 'foo/bar.vue'])
-
-  test('resolves dynamic nested routes', [
-    'users/_id.vue',
-    'users/test.vue',
-    'users.vue',
-    'users/_id/foo.vue'
-  ])
-
-  test('resolves spase nested routes', ['users.vue', 'users/session/login.vue'])
-
-  test('resolves number prefixed route', ['1test.vue', '1test/2nested.vue'])
-
-  test('resolve route meta', ['meta.vue'])
-
-  test('resolves as nested routes', ['index.vue', 'foo.vue'], true)
-
-  test('prioritizes index than dynamic route', [
-    'users/_id.vue',
-    'users/foo.vue',
-    'users/index.vue'
-  ])
-
-  it('throws error when failed to parse route-meta', () => {
-    expect(() => {
-      resolveRoutePaths(['invalid-meta.vue'], '@/pages/', false, mockReadFile)
-    }).toThrow(
-      /Invalid json format of <route-meta> content in invalid-meta\.vue/
-    )
+  test('resolves routes', {
+    value: { path: 'guides', type: 'directory' },
+    children: [
+      {
+        value: { path: 'guides/foo.md', type: 'file' }
+      },
+      {
+        value: { path: 'guides/bar.md', type: 'file' }
+      },
+      {
+        value: { path: 'guides/baz.md', type: 'file' }
+      }
+    ]
   })
 
-  describe('sorting', () => {
-    test('prioritizes static routes than dynamic ones', [
-      'nested/foo.vue',
-      'nested/_id.vue',
-      'nested/bar.vue'
-    ])
-
-    test('prioritizes deeper routes', [
-      'nested/_id/foo/bar.vue',
-      'nested/_id/_key/bar.vue',
-      'nested/test/foo/bar.vue',
-      'nested/test/foo/_id.vue'
-    ])
-
-    test('handles when a dynamic route is a directory', [
-      'nested/_id/foo.vue',
-      'nested/foo.vue'
-    ])
-
-    test('handles when a static route is a directory', [
-      'nested/_id.vue',
-      'nested/foo/bar.vue'
-    ])
-
-    test('handles when both static and dynamic routes are directories', [
-      'nested/_id/foo.vue',
-      'nested/static/foo.vue'
-    ])
+  test('resolves route meta', {
+    value: {
+      path: 'meta.md',
+      type: 'file'
+    }
   })
 })

@@ -1,0 +1,3 @@
+--
+requiresAuth: true
+---

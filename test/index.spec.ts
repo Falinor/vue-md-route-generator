@@ -1,10 +1,10 @@
-import * as path from 'path'
-import { generateRoutes } from '../src/index'
+import path from 'path'
+
+import { generateRoutes } from '../src'
 
 it('Integration test', () => {
   const res = generateRoutes({
-    pages: path.resolve(__dirname, 'fixtures')
+    folders: [path.resolve(__dirname, 'fixtures')]
   })
-
   expect(res).toMatchSnapshot()
 })

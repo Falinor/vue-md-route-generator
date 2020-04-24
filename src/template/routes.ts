@@ -1,29 +1,45 @@
-import * as prettier from 'prettier'
-import { PageMeta } from '../resolve'
+import prettier from 'prettier'
 
-function createChildrenRoute(children: PageMeta[]): string {
-  return `,children: [${children.map(createRoute).join(',')}]`
+import { PageMeta } from '../resolve'
+import { flatMap, Tree } from '../tree'
+
+export type PageMetaTree = Tree<PageMeta>
+
+export interface CreateRoutesOptions {
+  dynamic: boolean
+  chunkNamePrefix: string
 }
 
-function createRoute(meta: PageMeta): string {
+function createChildrenRoute(children: PageMetaTree[]): string {
+  return `children: [${children.map(createRoute).join(',')}],`
+}
+
+function createRoute(meta: PageMetaTree): string {
   const children = !meta.children ? '' : createChildrenRoute(meta.children)
 
   // If default child exists, the route should not have a name.
-  const routeName =
-    meta.children && meta.children.some(m => m.path === '')
-      ? ''
-      : `name: '${meta.name}',`
-
-  const routeMeta = !meta.routeMeta
+  const routeName = meta.children?.some(m => m.value.path === '')
     ? ''
-    : ',meta: ' + JSON.stringify(meta.routeMeta, null, 2)
+    : `name: '${meta.value.name}',`
+
+  const routeMeta = meta.value.routeMeta
+    ? `meta: ${JSON.stringify(meta.value.routeMeta, null, 2)},`
+    : ''
+
+  const redirect: PageMetaTree =
+    meta.children?.find(child => child.value.specifier.endsWith('Index')) ??
+    (meta.children?.[0] as PageMetaTree)
+  const specifier = meta.value.component
+    ? `component: ${meta.value.specifier},`
+    : `redirect: { name: '${redirect.value.name}' },`
 
   return `
   {
     ${routeName}
-    path: '${meta.path}',
-    component: ${meta.specifier}${routeMeta}${children}
-  }`
+    path: '${meta.value.path}',
+    ${specifier}${routeMeta}${children}
+  }
+  `
 }
 
 function createImport(
@@ -31,31 +47,26 @@ function createImport(
   dynamic: boolean,
   chunkNamePrefix: string
 ): string {
-  const code = dynamic
+  if (meta.component === null) {
+    return ''
+  }
+
+  return dynamic
     ? `function ${meta.specifier}() { return import(/* webpackChunkName: "${chunkNamePrefix}${meta.name}" */ '${meta.component}') }`
     : `import ${meta.specifier} from '${meta.component}'`
-
-  return meta.children
-    ? [code]
-        .concat(
-          meta.children.map(child =>
-            createImport(child, dynamic, chunkNamePrefix)
-          )
-        )
-        .join('\n')
-    : code
 }
 
 export function createRoutes(
-  meta: PageMeta[],
+  meta: PageMetaTree,
   dynamic: boolean,
   chunkNamePrefix: string
 ): string {
-  const imports = meta
-    .map(m => createImport(m, dynamic, chunkNamePrefix))
-    .join('\n')
-  const code = meta.map(createRoute).join(',')
-  return prettier.format(`${imports}\n\nexport default [${code}]`, {
+  const imports: string = flatMap(meta, node =>
+    createImport(node, dynamic, chunkNamePrefix)
+  ).join('\n')
+
+  const code = createRoute(meta)
+  return prettier.format(`${imports}\n\nexport default ${code}`, {
     parser: 'babel',
     semi: false,
     singleQuote: true

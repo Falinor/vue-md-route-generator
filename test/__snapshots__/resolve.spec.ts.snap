@@ -1,43 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Route resolution prioritizes index than dynamic route 1`] = `
-Array [
-  Object {
-    "component": "@/pages/users/index.vue",
-    "name": "users-index",
-    "path": "/users",
-    "pathSegments": Array [
-      "users",
-    ],
-    "specifier": "UsersIndex",
-  },
-  Object {
-    "component": "@/pages/users/foo.vue",
-    "name": "users-foo",
-    "path": "/users/foo",
-    "pathSegments": Array [
-      "users",
-      "foo",
-    ],
-    "specifier": "UsersFoo",
-  },
-  Object {
-    "component": "@/pages/users/_id.vue",
-    "name": "users-id",
-    "path": "/users/:id?",
-    "pathSegments": Array [
-      "users",
-      ":id?",
-    ],
-    "specifier": "UsersId",
-  },
-]
-`;
-
-exports[`Route resolution resolve route meta 1`] = `
-Array [
-  Object {
-    "component": "@/pages/meta.vue",
+exports[`Route resolution resolves route meta 1`] = `
+Object {
+  "value": Object {
+    "component": "@/assets/meta.md",
     "name": "meta",
     "path": "/meta",
     "pathSegments": Array [
@@ -48,404 +14,57 @@ Array [
     },
     "specifier": "Meta",
   },
-]
-`;
-
-exports[`Route resolution resolves as nested routes 1`] = `
-Array [
-  Object {
-    "component": "@/pages/index.vue",
-    "name": "index",
-    "path": "",
-    "pathSegments": Array [],
-    "specifier": "Index",
-  },
-  Object {
-    "component": "@/pages/foo.vue",
-    "name": "foo",
-    "path": "foo",
-    "pathSegments": Array [
-      "foo",
-    ],
-    "specifier": "Foo",
-  },
-]
-`;
-
-exports[`Route resolution resolves dynamic nested routes 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "component": "@/pages/users/test.vue",
-        "name": "users-test",
-        "path": "test",
-        "pathSegments": Array [
-          "users",
-          "test",
-        ],
-        "specifier": "UsersTest",
-      },
-      Object {
-        "children": Array [
-          Object {
-            "component": "@/pages/users/_id/foo.vue",
-            "name": "users-id-foo",
-            "path": "foo",
-            "pathSegments": Array [
-              "users",
-              ":id",
-              "foo",
-            ],
-            "specifier": "UsersIdFoo",
-          },
-        ],
-        "component": "@/pages/users/_id.vue",
-        "name": "users-id",
-        "path": ":id?",
-        "pathSegments": Array [
-          "users",
-          ":id?",
-        ],
-        "specifier": "UsersId",
-      },
-    ],
-    "component": "@/pages/users.vue",
-    "name": "users",
-    "path": "/users",
-    "pathSegments": Array [
-      "users",
-    ],
-    "specifier": "Users",
-  },
-]
-`;
-
-exports[`Route resolution resolves dynamic routes 1`] = `
-Array [
-  Object {
-    "component": "@/pages/users/_id.vue",
-    "name": "users-id",
-    "path": "/users/:id?",
-    "pathSegments": Array [
-      "users",
-      ":id?",
-    ],
-    "specifier": "UsersId",
-  },
-]
-`;
-
-exports[`Route resolution resolves dynamic routes with multiple "." 1`] = `
-Array [
-  Object {
-    "component": "@/pages/user.register.vue",
-    "name": "user.register",
-    "path": "/user.register",
-    "pathSegments": Array [
-      "user.register",
-    ],
-    "specifier": "UserRegister",
-  },
-]
-`;
-
-exports[`Route resolution resolves dynamic routes with required param 1`] = `
-Array [
-  Object {
-    "component": "@/pages/users/_id/index.vue",
-    "name": "users-id-index",
-    "path": "/users/:id",
-    "pathSegments": Array [
-      "users",
-      ":id",
-    ],
-    "specifier": "UsersIdIndex",
-  },
-]
-`;
-
-exports[`Route resolution resolves nested routes 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "component": "@/pages/foo/index.vue",
-        "name": "foo-index",
-        "path": "",
-        "pathSegments": Array [
-          "foo",
-        ],
-        "specifier": "FooIndex",
-      },
-      Object {
-        "component": "@/pages/foo/bar.vue",
-        "name": "foo-bar",
-        "path": "bar",
-        "pathSegments": Array [
-          "foo",
-          "bar",
-        ],
-        "specifier": "FooBar",
-      },
-    ],
-    "component": "@/pages/foo.vue",
-    "name": "foo",
-    "path": "/foo",
-    "pathSegments": Array [
-      "foo",
-    ],
-    "specifier": "Foo",
-  },
-]
-`;
-
-exports[`Route resolution resolves number prefixed route 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "component": "@/pages/1test/2nested.vue",
-        "name": "1test-2nested",
-        "path": "2nested",
-        "pathSegments": Array [
-          "1test",
-          "2nested",
-        ],
-        "specifier": "_1Test2Nested",
-      },
-    ],
-    "component": "@/pages/1test.vue",
-    "name": "1test",
-    "path": "/1test",
-    "pathSegments": Array [
-      "1test",
-    ],
-    "specifier": "_1Test",
-  },
-]
+}
 `;
 
 exports[`Route resolution resolves routes 1`] = `
-Array [
-  Object {
-    "component": "@/pages/index.vue",
-    "name": "index",
-    "path": "/",
-    "pathSegments": Array [],
-    "specifier": "Index",
-  },
-  Object {
-    "component": "@/pages/foo.vue",
-    "name": "foo",
-    "path": "/foo",
-    "pathSegments": Array [
-      "foo",
-    ],
-    "specifier": "Foo",
-  },
-  Object {
-    "component": "@/pages/baz.vue",
-    "name": "baz",
-    "path": "/baz",
-    "pathSegments": Array [
-      "baz",
-    ],
-    "specifier": "Baz",
-  },
-]
-`;
-
-exports[`Route resolution resolves spase nested routes 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "component": "@/pages/users/session/login.vue",
-        "name": "users-session-login",
-        "path": "session/login",
+Object {
+  "children": Array [
+    Object {
+      "value": Object {
+        "component": "@/assets/guides/foo.md",
+        "name": "guides-foo",
+        "path": "/guides/foo",
         "pathSegments": Array [
-          "users",
-          "session",
-          "login",
+          "guides",
+          "foo",
         ],
-        "specifier": "UsersSessionLogin",
+        "specifier": "GuidesFoo",
       },
-    ],
-    "component": "@/pages/users.vue",
-    "name": "users",
-    "path": "/users",
+    },
+    Object {
+      "value": Object {
+        "component": "@/assets/guides/bar.md",
+        "name": "guides-bar",
+        "path": "/guides/bar",
+        "pathSegments": Array [
+          "guides",
+          "bar",
+        ],
+        "specifier": "GuidesBar",
+      },
+    },
+    Object {
+      "value": Object {
+        "component": "@/assets/guides/baz.md",
+        "name": "guides-baz",
+        "path": "/guides/baz",
+        "pathSegments": Array [
+          "guides",
+          "baz",
+        ],
+        "specifier": "GuidesBaz",
+      },
+    },
+  ],
+  "value": Object {
+    "component": null,
+    "name": "guides",
+    "path": "/guides",
     "pathSegments": Array [
-      "users",
+      "guides",
     ],
-    "specifier": "Users",
+    "specifier": "Guides",
   },
-]
-`;
-
-exports[`Route resolution sorting handles when a dynamic route is a directory 1`] = `
-Array [
-  Object {
-    "component": "@/pages/nested/foo.vue",
-    "name": "nested-foo",
-    "path": "/nested/foo",
-    "pathSegments": Array [
-      "nested",
-      "foo",
-    ],
-    "specifier": "NestedFoo",
-  },
-  Object {
-    "component": "@/pages/nested/_id/foo.vue",
-    "name": "nested-id-foo",
-    "path": "/nested/:id/foo",
-    "pathSegments": Array [
-      "nested",
-      ":id",
-      "foo",
-    ],
-    "specifier": "NestedIdFoo",
-  },
-]
-`;
-
-exports[`Route resolution sorting handles when a static route is a directory 1`] = `
-Array [
-  Object {
-    "component": "@/pages/nested/foo/bar.vue",
-    "name": "nested-foo-bar",
-    "path": "/nested/foo/bar",
-    "pathSegments": Array [
-      "nested",
-      "foo",
-      "bar",
-    ],
-    "specifier": "NestedFooBar",
-  },
-  Object {
-    "component": "@/pages/nested/_id.vue",
-    "name": "nested-id",
-    "path": "/nested/:id?",
-    "pathSegments": Array [
-      "nested",
-      ":id?",
-    ],
-    "specifier": "NestedId",
-  },
-]
-`;
-
-exports[`Route resolution sorting handles when both static and dynamic routes are directories 1`] = `
-Array [
-  Object {
-    "component": "@/pages/nested/static/foo.vue",
-    "name": "nested-static-foo",
-    "path": "/nested/static/foo",
-    "pathSegments": Array [
-      "nested",
-      "static",
-      "foo",
-    ],
-    "specifier": "NestedStaticFoo",
-  },
-  Object {
-    "component": "@/pages/nested/_id/foo.vue",
-    "name": "nested-id-foo",
-    "path": "/nested/:id/foo",
-    "pathSegments": Array [
-      "nested",
-      ":id",
-      "foo",
-    ],
-    "specifier": "NestedIdFoo",
-  },
-]
-`;
-
-exports[`Route resolution sorting prioritizes deeper routes 1`] = `
-Array [
-  Object {
-    "component": "@/pages/nested/test/foo/bar.vue",
-    "name": "nested-test-foo-bar",
-    "path": "/nested/test/foo/bar",
-    "pathSegments": Array [
-      "nested",
-      "test",
-      "foo",
-      "bar",
-    ],
-    "specifier": "NestedTestFooBar",
-  },
-  Object {
-    "component": "@/pages/nested/test/foo/_id.vue",
-    "name": "nested-test-foo-id",
-    "path": "/nested/test/foo/:id?",
-    "pathSegments": Array [
-      "nested",
-      "test",
-      "foo",
-      ":id?",
-    ],
-    "specifier": "NestedTestFooId",
-  },
-  Object {
-    "component": "@/pages/nested/_id/foo/bar.vue",
-    "name": "nested-id-foo-bar",
-    "path": "/nested/:id/foo/bar",
-    "pathSegments": Array [
-      "nested",
-      ":id",
-      "foo",
-      "bar",
-    ],
-    "specifier": "NestedIdFooBar",
-  },
-  Object {
-    "component": "@/pages/nested/_id/_key/bar.vue",
-    "name": "nested-id-key-bar",
-    "path": "/nested/:id/:key/bar",
-    "pathSegments": Array [
-      "nested",
-      ":id",
-      ":key",
-      "bar",
-    ],
-    "specifier": "NestedIdKeyBar",
-  },
-]
-`;
-
-exports[`Route resolution sorting prioritizes static routes than dynamic ones 1`] = `
-Array [
-  Object {
-    "component": "@/pages/nested/foo.vue",
-    "name": "nested-foo",
-    "path": "/nested/foo",
-    "pathSegments": Array [
-      "nested",
-      "foo",
-    ],
-    "specifier": "NestedFoo",
-  },
-  Object {
-    "component": "@/pages/nested/bar.vue",
-    "name": "nested-bar",
-    "path": "/nested/bar",
-    "pathSegments": Array [
-      "nested",
-      "bar",
-    ],
-    "specifier": "NestedBar",
-  },
-  Object {
-    "component": "@/pages/nested/_id.vue",
-    "name": "nested-id",
-    "path": "/nested/:id?",
-    "pathSegments": Array [
-      "nested",
-      ":id?",
-    ],
-    "specifier": "NestedId",
-  },
-]
+}
 `;

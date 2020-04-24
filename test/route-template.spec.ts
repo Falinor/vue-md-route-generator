@@ -1,137 +1,90 @@
 import { createRoutes } from '../src/template/routes'
-import { PageMeta } from '../src/resolve'
+import { PageMetaTree } from '../src/resolve'
 
 describe('Route template', () => {
-  it('should generate routes', () => {
-    const meta: PageMeta[] = [
-      {
-        name: 'foo',
-        specifier: 'Foo',
-        path: '/foo',
-        pathSegments: ['foo'],
-        component: '@/assets/foo.md'
-      },
-      {
-        name: 'bar',
-        specifier: 'Bar',
-        path: '/bar',
-        pathSegments: ['bar'],
-        component: '@/assets/bar.md'
-      }
-    ]
-
-    expect(createRoutes(meta, true, '')).toMatchSnapshot()
-  })
-
-  it('should generate nested routes', () => {
-    const meta: PageMeta[] = [
-      {
-        name: 'foo',
-        specifier: 'Foo',
-        path: '/foo',
-        pathSegments: ['foo'],
-        component: '@/assets/foo.md',
-        children: [
-          {
-            name: 'bar',
-            specifier: 'FooBar',
-            path: 'bar',
-            pathSegments: ['foo', 'bar'],
-            component: '@/assets/bar.md'
-          },
-          {
-            name: 'baz',
-            specifier: 'FooBaz',
-            path: 'baz',
-            pathSegments: ['foo', 'baz'],
-            component: '@/assets/baz.md'
-          }
-        ]
-      }
-    ]
-
-    expect(createRoutes(meta, true, '')).toMatchSnapshot()
-  })
-
-  it('should generate static import code', () => {
-    const meta: PageMeta[] = [
-      {
-        name: 'foo',
-        specifier: 'Foo',
-        path: '/foo',
-        pathSegments: ['foo'],
-        component: '@/assets/foo.md'
-      },
-      {
-        name: 'bar',
-        specifier: 'Bar',
-        path: '/bar',
-        pathSegments: ['bar'],
-        component: '@/assets/bar.md'
-      }
-    ]
-
-    expect(createRoutes(meta, false, '')).toMatchSnapshot()
-  })
-
-  it('should generate route meta', () => {
-    const meta: PageMeta[] = [
-      {
-        name: 'foo',
-        specifier: 'Foo',
-        path: '/foo',
-        pathSegments: ['foo'],
-        component: '@/assets/foo.md',
-        routeMeta: {
-          title: 'Hello'
-        }
-      }
-    ]
-
-    expect(createRoutes(meta, false, '')).toMatchSnapshot()
-  })
-
   it('should configure chunk name prefix', () => {
-    const meta: PageMeta[] = [
-      {
+    const meta: PageMetaTree = {
+      value: {
         name: 'foo',
-        specifier: 'Foo',
         path: '/foo',
         pathSegments: ['foo'],
+        specifier: 'Foo',
         component: '@/assets/foo.md'
-      },
-      {
-        name: 'bar',
-        specifier: 'Bar',
-        path: '/bar',
-        pathSegments: ['bar'],
-        component: '@/assets/bar.md'
       }
-    ]
+    }
 
-    expect(createRoutes(meta, true, 'page-')).toMatchSnapshot()
+    expect(createRoutes(meta, true, 'assets-')).toMatchSnapshot()
+  })
+
+  it('should allow static imports', () => {
+    const meta: PageMetaTree = {
+      value: {
+        name: 'foo',
+        path: '/foo',
+        pathSegments: ['foo'],
+        specifier: 'Foo',
+        component: '@/assets/foo.md'
+      }
+    }
+
+    expect(createRoutes(meta, true, '')).toMatchSnapshot()
+  })
+
+  it('should generate routes', () => {
+    const meta: PageMetaTree = {
+      value: {
+        component: null,
+        name: 'guides',
+        path: '/guides',
+        pathSegments: ['guides'],
+        specifier: 'Guides'
+      },
+      children: [
+        {
+          value: {
+            name: 'guides-foo',
+            specifier: 'GuidesFoo',
+            path: 'foo',
+            pathSegments: ['guides', 'foo'],
+            component: '@/assets/guides/foo.md'
+          }
+        },
+        {
+          value: {
+            name: 'guides-bar',
+            specifier: 'GuidesBar',
+            path: 'bar',
+            pathSegments: ['guides', 'bar'],
+            component: '@/assets/guides/bar.md'
+          }
+        }
+      ]
+    }
+
+    expect(createRoutes(meta, true, '')).toMatchSnapshot()
   })
 
   it('should not include name if the route has a default child', () => {
-    const meta: PageMeta[] = [
-      {
+    const meta: PageMetaTree = {
+      value: {
         name: 'foo',
         specifier: 'Foo',
         path: '/foo',
         pathSegments: ['foo'],
-        component: '@/assets/foo.md',
-        children: [
-          {
+        component: null
+      },
+      children: [
+        {
+          value: {
             name: 'foo-index',
             specifier: 'FooIndex',
             path: '',
             pathSegments: ['foo'],
             component: '@/pages/foo/index.md'
           }
-        ]
-      }
-    ]
-
+        }
+      ]
+    }
     expect(createRoutes(meta, true, '')).toMatchSnapshot()
   })
 })

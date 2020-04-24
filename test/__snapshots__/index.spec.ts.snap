@@ -1,86 +1,84 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Integration test 1`] = `
-"function Index() {
-  return import(/* webpackChunkName: \\"index\\" */ '@/pages/index.vue')
-}
-function Foo() {
-  return import(/* webpackChunkName: \\"foo\\" */ '@/pages/foo.vue')
-}
-function FooIndex() {
-  return import(/* webpackChunkName: \\"foo-index\\" */ '@/pages/foo/index.vue')
-}
-function FooBar() {
-  return import(/* webpackChunkName: \\"foo-bar\\" */ '@/pages/foo/bar.vue')
-}
-function FooId() {
-  return import(/* webpackChunkName: \\"foo-id\\" */ '@/pages/foo/_id.vue')
-}
-function Meta() {
-  return import(/* webpackChunkName: \\"meta\\" */ '@/pages/meta.vue')
-}
-function UserRegister() {
+"function FixturesFooBarBazOverview() {
   return import(
-    /* webpackChunkName: \\"user.register\\" */ '@/pages/user.register.vue'
+    /* webpackChunkName: \\"fixtures-foo-bar-baz-overview\\" */ '@/assets/fixtures/foo/bar/baz/overview.md'
   )
 }
-function IdIndex() {
-  return import(/* webpackChunkName: \\"id-index\\" */ '@/pages/_id/index.vue')
+function FixturesFooFooBar() {
+  return import(
+    /* webpackChunkName: \\"fixtures-foo-foo-bar\\" */ '@/assets/fixtures/foo/foo-bar.md'
+  )
 }
-function IdTest() {
-  return import(/* webpackChunkName: \\"id-test\\" */ '@/pages/_id/test.vue')
+function FixturesFooIndex() {
+  return import(
+    /* webpackChunkName: \\"fixtures-foo-index\\" */ '@/assets/fixtures/foo/index.md'
+  )
+}
+function FixturesIndex() {
+  return import(
+    /* webpackChunkName: \\"fixtures-index\\" */ '@/assets/fixtures/index.md'
+  )
+}
+function FixturesMeta() {
+  return import(
+    /* webpackChunkName: \\"fixtures-meta\\" */ '@/assets/fixtures/meta.md'
+  )
 }
 
-export default [
-  {
-    name: 'index',
-    path: '/',
-    component: Index
-  },
-  {
-    path: '/foo',
-    component: Foo,
-    children: [
-      {
-        name: 'foo-index',
-        path: '',
-        component: FooIndex
-      },
-      {
-        name: 'foo-bar',
-        path: 'bar',
-        component: FooBar
-      },
-      {
-        name: 'foo-id',
-        path: ':id?',
-        component: FooId
-      }
-    ]
-  },
-  {
-    name: 'meta',
-    path: '/meta',
-    component: Meta,
-    meta: {
-      requiresAuth: true
+export default {
+  name: 'fixtures',
+  path: '/fixtures',
+  redirect: { name: 'fixtures-index' },
+  children: [
+    {
+      name: 'fixtures-foo',
+      path: '/fixtures/foo',
+      redirect: { name: 'fixtures-foo-index' },
+      children: [
+        {
+          name: 'fixtures-foo-bar',
+          path: '/fixtures/foo/bar',
+          redirect: { name: 'fixtures-foo-bar-baz' },
+          children: [
+            {
+              name: 'fixtures-foo-bar-baz',
+              path: '/fixtures/foo/bar/baz',
+              redirect: { name: 'fixtures-foo-bar-baz-overview' },
+              children: [
+                {
+                  name: 'fixtures-foo-bar-baz-overview',
+                  path: '/fixtures/foo/bar/baz/overview',
+                  component: FixturesFooBarBazOverview
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: 'fixtures-foo-foo-bar',
+          path: '/fixtures/foo/foo-bar',
+          component: FixturesFooFooBar
+        },
+        {
+          name: 'fixtures-foo-index',
+          path: '/fixtures/foo',
+          component: FixturesFooIndex
+        }
+      ]
+    },
+    {
+      name: 'fixtures-index',
+      path: '/fixtures',
+      component: FixturesIndex
+    },
+    {
+      name: 'fixtures-meta',
+      path: '/fixtures/meta',
+      component: FixturesMeta
     }
-  },
-  {
-    name: 'user.register',
-    path: '/user.register',
-    component: UserRegister
-  },
-  {
-    name: 'id-index',
-    path: '/:id',
-    component: IdIndex
-  },
-  {
-    name: 'id-test',
-    path: '/:id/test',
-    component: IdTest
-  }
-]
+  ]
+}
 "
 `;

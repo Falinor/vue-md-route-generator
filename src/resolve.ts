@@ -1,142 +1,52 @@
-import { parseComponent } from 'vue-template-compiler'
-import { NestedMap, setToMap } from './nested-map'
+import parseFrontMatter from 'gray-matter'
+import isEmpty from 'lodash.isempty'
+import path from 'path'
+
+import { map, Tree } from './tree'
 
 export interface PageMeta {
   name: string
   specifier: string
   path: string
   pathSegments: string[]
-  component: string
-  children?: PageMeta[]
+  component: string | null
   routeMeta?: any
 }
 
-interface FileError extends Error {
-  file?: string
+export interface File {
+  path: string
+  type: 'directory' | 'file'
 }
 
-const routeMetaName = 'route-meta'
+export type FileTree = Tree<File>
+export type PageMetaTree = Tree<PageMeta>
 
 export function resolveRoutePaths(
-  paths: string[],
+  tree: FileTree,
   importPrefix: string,
-  nested: boolean,
   readFile: (path: string) => string
-): PageMeta[] {
-  const map: NestedMap<string[]> = {}
-
-  const splitted = paths.map(p => p.split('/'))
-  splitted.forEach(path => {
-    setToMap(map, pathToMapPath(path), path)
-  })
-
-  return pathMapToMeta(map, importPrefix, nested, readFile)
-}
-
-function pathMapToMeta(
-  map: NestedMap<string[]>,
-  importPrefix: string,
-  nested: boolean,
-  readFile: (path: string) => string,
-  parentDepth: number = 0
-): PageMeta[] {
-  if (map.value) {
-    const path = map.value
-
+): Tree<PageMeta> {
+  return map(tree, (file: File) => {
+    const segments: string[] = file.path.split('/')
     const meta: PageMeta = {
-      name: pathToName(path),
-      specifier: pathToSpecifier(path),
-      path: pathToRoute(path, parentDepth, nested),
-      pathSegments: toActualPath(path),
-      component: importPrefix + path.join('/')
+      name: pathToName(segments),
+      path: pathToRoute(segments, 0, false),
+      pathSegments: toActualPath(segments),
+      component: null,
+      specifier: pathToSpecifier(segments)
     }
 
-    const content = readFile(path.join('/'))
-    const parsed = parseComponent(content, {
-      pad: 'space'
-    })
-    const routeMetaBlock = parsed.customBlocks.find(
-      b => b.type === routeMetaName
-    )
-
-    if (routeMetaBlock) {
-      try {
-        meta.routeMeta = JSON.parse(routeMetaBlock.content)
-      } catch (err) {
-        const joinedPath = path.join('/')
-        const wrapped: FileError = new Error(
-          `Invalid json format of <route-meta> content in ${joinedPath}\n` +
-            err.message
-        )
-
-        // Store file path to provide useful information to downstream tools
-        // like friendly-errors-webpack-plugin
-        wrapped.file = joinedPath
-
-        throw wrapped
+    if (file.type === 'file') {
+      const content = readFile(file.path)
+      const { data } = parseFrontMatter(content)
+      if (!isEmpty(data)) {
+        meta.routeMeta = data
       }
+      meta.component = importPrefix + file.path
     }
 
-    if (map.children) {
-      meta.children = pathMapChildrenToMeta(
-        map.children,
-        importPrefix,
-        nested,
-        readFile,
-        path.length
-      )
-    }
-
-    return [meta]
-  }
-
-  return map.children
-    ? pathMapChildrenToMeta(
-        map.children,
-        importPrefix,
-        nested,
-        readFile,
-        parentDepth
-      )
-    : []
-}
-
-function routePathComparator(a: string[], b: string[]): number {
-  const a0 = a[0]
-  const b0 = b[0]
-
-  if (!a0 || !b0) {
-    return a.length - b.length
-  }
-
-  const aOrder = isDynamicRoute(a0) ? 1 : 0
-  const bOrder = isDynamicRoute(b0) ? 1 : 0
-  const order = aOrder - bOrder
-
-  return order !== 0 ? order : routePathComparator(a.slice(1), b.slice(1))
-}
-
-function pathMapChildrenToMeta(
-  children: Map<string, NestedMap<string[]>>,
-  importPrefix: string,
-  nested: boolean,
-  readFile: (path: string) => string,
-  parentDepth: number
-): PageMeta[] {
-  return Array.from(children.values())
-    .reduce<PageMeta[]>((acc, value) => {
-      return acc.concat(
-        pathMapToMeta(value, importPrefix, nested, readFile, parentDepth)
-      )
-    }, [])
-    .sort((a, b) => {
-      // Prioritize static routes than dynamic routes
-      return routePathComparator(a.pathSegments, b.pathSegments)
-    })
-}
-
-function isDynamicRoute(segment: string): boolean {
-  return segment[0] === ':'
+    return meta
+  })
 }
 
 function isOmittable(segment: string): boolean {
@@ -144,43 +54,25 @@ function isOmittable(segment: string): boolean {
 }
 
 /**
- * - Remove `.vue` from the last path
- * - Omit if the last segument is `index`
+ * - Remove `.md` from the last path
+ * - Omit if the last segment is `index`
  * - Convert dynamic route to `:param` format
  */
 function toActualPath(segments: string[]): string[] {
   const lastIndex = segments.length - 1
   const last = basename(segments[lastIndex])
 
-  if (isOmittable(last)) {
-    segments = segments.slice(0, -1)
-  } else {
-    segments = segments.slice(0, -1).concat(last)
-  }
-
-  return segments.map((s, i) => {
-    if (s[0] === '_') {
-      const suffix = lastIndex === i ? '?' : ''
-      return ':' + s.slice(1) + suffix
-    } else {
-      return s
-    }
-  })
-}
-
-function pathToMapPath(segments: string[]): string[] {
-  const last = segments[segments.length - 1]
-  return segments.slice(0, -1).concat(basename(last))
+  const segmentsWithoutLast = segments.slice(0, -1)
+  return isOmittable(last)
+    ? segmentsWithoutLast
+    : segmentsWithoutLast.concat(last)
 }
 
 function pathToName(segments: string[]): string {
   const last = segments[segments.length - 1]
-  segments = segments.slice(0, -1).concat(basename(last))
-
   return segments
-    .map(s => {
-      return s[0] === '_' ? s.slice(1) : s
-    })
+    .slice(0, -1)
+    .concat(basename(last))
     .join('-')
 }
 
@@ -210,5 +102,5 @@ function pathToRoute(
 }
 
 function basename(filename: string): string {
-  return filename.replace(/\.[^.]+$/g, '')
+  return path.basename(filename, '.md')
 }
