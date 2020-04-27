@@ -1,84 +1,79 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Integration test 1`] = `
-"function FixturesFooBarBazOverview() {
+"function FooBarBazOverview() {
   return import(
-    /* webpackChunkName: \\"fixtures-foo-bar-baz-overview\\" */ '@/assets/fixtures/foo/bar/baz/overview.md'
+    /* webpackChunkName: \\"foo-bar-baz-overview\\" */ '@/assets/foo/bar/baz/overview.md'
   )
 }
-function FixturesFooFooBar() {
-  return import(
-    /* webpackChunkName: \\"fixtures-foo-foo-bar\\" */ '@/assets/fixtures/foo/foo-bar.md'
-  )
+function FooFooBar() {
+  return import(/* webpackChunkName: \\"foo-foo-bar\\" */ '@/assets/foo/foo-bar.md')
 }
-function FixturesFooIndex() {
-  return import(
-    /* webpackChunkName: \\"fixtures-foo-index\\" */ '@/assets/fixtures/foo/index.md'
-  )
-}
-function FixturesIndex() {
-  return import(
-    /* webpackChunkName: \\"fixtures-index\\" */ '@/assets/fixtures/index.md'
-  )
-}
-function FixturesMeta() {
-  return import(
-    /* webpackChunkName: \\"fixtures-meta\\" */ '@/assets/fixtures/meta.md'
-  )
+function FooIndex() {
+  return import(/* webpackChunkName: \\"foo-index\\" */ '@/assets/foo/index.md')
 }
 
-export default {
-  name: 'fixtures',
-  path: '/fixtures',
-  redirect: { name: 'fixtures-index' },
-  children: [
-    {
-      name: 'fixtures-foo',
-      path: '/fixtures/foo',
-      redirect: { name: 'fixtures-foo-index' },
-      children: [
-        {
-          name: 'fixtures-foo-bar',
-          path: '/fixtures/foo/bar',
-          redirect: { name: 'fixtures-foo-bar-baz' },
-          children: [
-            {
-              name: 'fixtures-foo-bar-baz',
-              path: '/fixtures/foo/bar/baz',
-              redirect: { name: 'fixtures-foo-bar-baz-overview' },
-              children: [
-                {
-                  name: 'fixtures-foo-bar-baz-overview',
-                  path: '/fixtures/foo/bar/baz/overview',
-                  component: FixturesFooBarBazOverview
-                }
-              ]
-            }
-          ]
-        },
-        {
-          name: 'fixtures-foo-foo-bar',
-          path: '/fixtures/foo/foo-bar',
-          component: FixturesFooFooBar
-        },
-        {
-          name: 'fixtures-foo-index',
-          path: '/fixtures/foo',
-          component: FixturesFooIndex
-        }
-      ]
-    },
-    {
-      name: 'fixtures-index',
-      path: '/fixtures',
-      component: FixturesIndex
-    },
-    {
-      name: 'fixtures-meta',
-      path: '/fixtures/meta',
-      component: FixturesMeta
-    }
-  ]
+function BarIndex() {
+  return import(/* webpackChunkName: \\"bar-index\\" */ '@/assets/bar/index.md')
 }
+function BarMeta() {
+  return import(/* webpackChunkName: \\"bar-meta\\" */ '@/assets/bar/meta.md')
+}
+
+export default [
+  {
+    name: 'foo',
+    path: '/foo',
+    redirect: { name: 'foo-index' },
+    children: [
+      {
+        name: 'foo-bar',
+        path: '/foo/bar',
+        redirect: { name: 'foo-bar-baz' },
+        children: [
+          {
+            name: 'foo-bar-baz',
+            path: '/foo/bar/baz',
+            redirect: { name: 'foo-bar-baz-overview' },
+            children: [
+              {
+                name: 'foo-bar-baz-overview',
+                path: '/foo/bar/baz/overview',
+                component: FooBarBazOverview
+              }
+            ]
+          }
+        ]
+      },
+      {
+        name: 'foo-foo-bar',
+        path: '/foo/foo-bar',
+        component: FooFooBar
+      },
+      {
+        name: 'foo-index',
+        path: '/foo',
+        component: FooIndex
+      }
+    ]
+  },
+  {
+    name: 'bar',
+    path: '/bar',
+    redirect: { name: 'bar-index' },
+    children: [
+      {
+        name: 'bar-index',
+        path: '/bar',
+        component: BarIndex
+      },
+      {
+        name: 'bar-meta',
+        path: '/bar/meta',
+        component: BarMeta
+      }
+    ]
+  }
+]
 "
 `;

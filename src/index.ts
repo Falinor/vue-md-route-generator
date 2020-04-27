@@ -2,9 +2,10 @@ import fs from 'fs'
 import directoryTree, { DirectoryTree } from 'directory-tree'
 import { basename, dirname, isAbsolute, join } from 'path'
 
-import { createRoutes } from './template/routes'
+import { createRoutes, RouteString } from './template/routes'
 import { resolveRoutePaths } from './resolve'
 import { FileTree } from './resolve'
+import prettier from 'prettier'
 
 export interface GenerateConfig {
   folders: string[]
@@ -38,15 +39,20 @@ export function generateRoutes({
   dynamicImport = true,
   chunkNamePrefix = ''
 }: GenerateConfig): string {
-  return folders
-    .map(folder => {
-      const dirTree = directoryTree(folder, { extensions: /\.md$/ })
-      const pathTree = toPathTree(dirTree, basename(folder))
+  const routeStrings: RouteString[] = folders.map(folder => {
+    const dirTree = directoryTree(folder, { extensions: /\.md$/ })
+    const pathTree = toPathTree(dirTree, basename(folder))
 
-      const meta = resolveRoutePaths(pathTree, importPrefix, file => {
-        return fs.readFileSync(join(dirname(folder), file), 'utf8')
-      })
-      return createRoutes(meta, dynamicImport, chunkNamePrefix)
+    const meta = resolveRoutePaths(pathTree, importPrefix, file => {
+      return fs.readFileSync(join(dirname(folder), file), 'utf8')
     })
-    .join(',\n')
+    return createRoutes(meta, dynamicImport, chunkNamePrefix)
+  })
+  const imports: string = routeStrings.map(rs => rs.imports).join('\n')
+  const routes: string = routeStrings.map(rs => rs.code).join(',\n')
+  return prettier.format(`${imports}\n\nexport default [${routes}]`, {
+    parser: 'babel',
+    semi: false,
+    singleQuote: true
+  })
 }

@@ -27,7 +27,7 @@ describe('Route template', () => {
       }
     }
 
-    expect(createRoutes(meta, true, '')).toMatchSnapshot()
+    expect(createRoutes(meta, false, '')).toMatchSnapshot()
   })
 
   it('should generate routes', () => {
@@ -80,11 +80,27 @@ describe('Route template', () => {
             specifier: 'FooIndex',
             path: '',
             pathSegments: ['foo'],
-            component: '@/pages/foo/index.md'
+            component: '@/assets/foo/index.md'
           }
         }
       ]
     }
     expect(createRoutes(meta, true, '')).toMatchSnapshot()
+  })
+
+  it('should generate route meta', () => {
+    const meta: PageMetaTree = {
+      value: {
+        name: 'foo',
+        specifier: 'Foo',
+        path: '/foo',
+        pathSegments: ['foo'],
+        routeMeta: {
+          title: 'Hello'
+        },
+        component: '@/assets/foo.md'
+      }
+    }
+    expect(createRoutes(meta, false, '')).toMatchSnapshot()
   })
 })

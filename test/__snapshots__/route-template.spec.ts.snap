@@ -1,109 +1,89 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Route template should allow static imports 1`] = `
-"function Foo() {
-  return import(/* webpackChunkName: \\"foo\\" */ '@/assets/foo.md')
-}
-
-export default {
-  name: 'foo',
-  path: '/foo',
-  component: Foo
-}
-"
-`;
-
-exports[`Route template should configure chunk name prefix 1`] = `
-"function Foo() {
-  return import(/* webpackChunkName: \\"assets-foo\\" */ '@/assets/foo.md')
-}
-
-export default {
-  name: 'foo',
-  path: '/foo',
-  component: Foo
-}
-"
-`;
-
-exports[`Route template should generate route meta 1`] = `
-"import Foo from '@/assets/foo.md'
-
-export default [
+Object {
+  "code": "
   {
     name: 'foo',
     path: '/foo',
     component: Foo,
-    meta: {
-      title: 'Hello'
-    }
   }
-]
-"
+  ",
+  "imports": "import Foo from '@/assets/foo.md'",
+}
 `;
 
-exports[`Route template should generate routes 1`] = `
-"function GuidesFoo() {
-  return import(/* webpackChunkName: \\"guides-foo\\" */ '@/assets/guides/foo.md')
-}
-function GuidesBar() {
-  return import(/* webpackChunkName: \\"guides-bar\\" */ '@/assets/guides/bar.md')
-}
-
-export default {
-  name: 'guides',
-  path: '/guides',
-  redirect: { name: 'guides-foo' },
-  children: [
-    {
-      name: 'guides-foo',
-      path: 'foo',
-      component: GuidesFoo
-    },
-    {
-      name: 'guides-bar',
-      path: 'bar',
-      component: GuidesBar
-    }
-  ]
-}
-"
-`;
-
-exports[`Route template should generate static import code 1`] = `
-"import Foo from '@/assets/foo.md'
-import Bar from '@/assets/bar.md'
-
-export default [
+exports[`Route template should configure chunk name prefix 1`] = `
+Object {
+  "code": "
   {
     name: 'foo',
     path: '/foo',
-    component: Foo
-  },
-  {
-    name: 'bar',
-    path: '/bar',
-    component: Bar
+    component: Foo,
   }
-]
-"
+  ",
+  "imports": "function Foo() { return import(/* webpackChunkName: \\"assets-foo\\" */ '@/assets/foo.md') }",
+}
+`;
+
+exports[`Route template should generate route meta 1`] = `
+Object {
+  "code": "
+  {
+    name: 'foo',
+    path: '/foo',
+    component: Foo,meta: {
+  \\"title\\": \\"Hello\\"
+},
+  }
+  ",
+  "imports": "import Foo from '@/assets/foo.md'",
+}
+`;
+
+exports[`Route template should generate routes 1`] = `
+Object {
+  "code": "
+  {
+    name: 'guides',
+    path: '/guides',
+    redirect: { name: 'guides-foo' },children: [
+  {
+    name: 'guides-foo',
+    path: 'foo',
+    component: GuidesFoo,
+  }
+  ,
+  {
+    name: 'guides-bar',
+    path: 'bar',
+    component: GuidesBar,
+  }
+  ],
+  }
+  ",
+  "imports": "
+function GuidesFoo() { return import(/* webpackChunkName: \\"guides-foo\\" */ '@/assets/guides/foo.md') }
+function GuidesBar() { return import(/* webpackChunkName: \\"guides-bar\\" */ '@/assets/guides/bar.md') }",
+}
 `;
 
 exports[`Route template should not include name if the route has a default child 1`] = `
-"function FooIndex() {
-  return import(/* webpackChunkName: \\"foo-index\\" */ '@/pages/foo/index.md')
+Object {
+  "code": "
+  {
+    
+    path: '/foo',
+    redirect: { name: 'foo-index' },children: [
+  {
+    name: 'foo-index',
+    path: '',
+    component: FooIndex,
+  }
+  ],
+  }
+  ",
+  "imports": "
+function FooIndex() { return import(/* webpackChunkName: \\"foo-index\\" */ '@/assets/foo/index.md') }",
 }
-
-export default {
-  path: '/foo',
-  redirect: { name: 'foo-index' },
-  children: [
-    {
-      name: 'foo-index',
-      path: '',
-      component: FooIndex
-    }
-  ]
-}
-"
 `;

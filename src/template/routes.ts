@@ -1,5 +1,3 @@
-import prettier from 'prettier'
-
 import { PageMeta } from '../resolve'
 import { flatMap, Tree } from '../tree'
 
@@ -56,19 +54,20 @@ function createImport(
     : `import ${meta.specifier} from '${meta.component}'`
 }
 
+export interface RouteString {
+  imports: string
+  code: string
+}
+
 export function createRoutes(
   meta: PageMetaTree,
   dynamic: boolean,
   chunkNamePrefix: string
-): string {
+): RouteString {
   const imports: string = flatMap(meta, node =>
     createImport(node, dynamic, chunkNamePrefix)
   ).join('\n')
 
   const code = createRoute(meta)
-  return prettier.format(`${imports}\n\nexport default ${code}`, {
-    parser: 'babel',
-    semi: false,
-    singleQuote: true
-  })
+  return { imports, code }
 }
