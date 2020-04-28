@@ -139,3 +139,7 @@ export default [
 ## License
 
 MIT
+
+## Thanks
+
+Thanks to [ktsn](https://github.com/ktsn) for the initial code!
