@@ -47,3 +47,16 @@ export function flatMap<T = any, U = any>(
 ): U[] {
   return flatten(map(tree, fn))
 }
+
+export type SortFunction<T> = (a: Tree<T>, b: Tree<T>) => number
+
+export function sort<T = any>(tree: Tree<T>, fn: SortFunction<T>): Tree<T> {
+  const children = tree.children ?? []
+  if (children.length) {
+    tree.children = [...children].sort(fn)
+    tree?.children?.forEach(child => {
+      sort(child, fn)
+    })
+  }
+  return tree
+}

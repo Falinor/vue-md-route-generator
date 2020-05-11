@@ -1,4 +1,4 @@
-import { flatMap, flatten, forEach, map, Tree } from '../src/tree'
+import { flatMap, flatten, forEach, map, sort, Tree } from '../src/tree'
 
 interface File {
   name: string
@@ -123,6 +123,28 @@ describe('Tree', () => {
         'foobar',
         'foobaz'
       ])
+    })
+  })
+
+  describe('#sort', () => {
+    it('should sort each level of the tree using a compare function', () => {
+      const tree: Tree<number> = {
+        value: 1,
+        children: [
+          { value: 2 },
+          { value: 1 },
+          { value: 3, children: [{ value: 2 }, { value: 3 }, { value: 1 }] }
+        ]
+      }
+      const actual = sort(tree, (a, b) => a.value - b.value)
+      expect(actual).toStrictEqual<Tree<number>>({
+        value: 1,
+        children: [
+          { value: 1 },
+          { value: 2 },
+          { value: 3, children: [{ value: 1 }, { value: 2 }, { value: 3 }] }
+        ]
+      })
     })
   })
 })
