@@ -2,7 +2,8 @@ import parseFrontMatter from 'gray-matter'
 import isEmpty from 'lodash.isempty'
 import path from 'path'
 
-import { map, Tree } from './tree'
+import { filter, map, sort, Tree } from './tree'
+import { hasOwnProperty } from 'tslint/lib/utils'
 
 export interface PageMeta {
   name: string
@@ -10,7 +11,7 @@ export interface PageMeta {
   path: string
   pathSegments: string[]
   component: string | null
-  routeMeta?: any
+  routeMeta?: unknown
 }
 
 export interface File {
@@ -25,28 +26,77 @@ export function resolveRoutePaths(
   tree: FileTree,
   importPrefix: string,
   readFile: (path: string) => string
-): Tree<PageMeta> {
-  return map(tree, (file: File) => {
-    const segments: string[] = file.path.split('/')
-    const meta: PageMeta = {
-      name: pathToName(segments),
-      path: pathToRoute(segments, 0, false),
-      pathSegments: toActualPath(segments),
-      component: null,
-      specifier: pathToSpecifier(segments)
-    }
+): PageMetaTree {
+  return sortByMeta(
+    filterDirectoryMeta(
+      map(tree, (file: File, children?: FileTree[]) => {
+        const segments: string[] = file.path.split('/')
+        const meta: PageMeta = {
+          name: pathToName(segments),
+          path: pathToRoute(segments, 0, false),
+          pathSegments: toActualPath(segments),
+          component: null,
+          specifier: pathToSpecifier(segments)
+        }
 
-    if (file.type === 'file') {
-      const content = readFile(file.path)
-      const { data } = parseFrontMatter(content)
-      if (!isEmpty(data)) {
-        meta.routeMeta = data
+        if (file.type === 'file') {
+          const content = readFile(file.path)
+          const { data } = parseFrontMatter(content)
+          if (!isEmpty(data)) {
+            meta.routeMeta = data
+          }
+          meta.component = importPrefix + file.path
+        }
+
+        if (file.type === 'directory' && children?.length) {
+          const metaFile = children.find(
+            child =>
+              child.value.type === 'file' &&
+              basename(child.value.path) === '__meta__'
+          )
+          if (metaFile !== undefined) {
+            const content = readFile(metaFile.value.path)
+            const { data } = parseFrontMatter(content)
+            if (!isEmpty(data)) {
+              meta.routeMeta = data
+            }
+          }
+        }
+
+        return meta
+      })
+    )
+  )
+}
+
+function sortByMeta(tree: PageMetaTree): PageMetaTree {
+  return sort(tree, (a: PageMetaTree, b: PageMetaTree): number => {
+    const routeMeta1 = a.value.routeMeta
+    const routeMeta2 = b.value.routeMeta
+
+    if (hasOrder(routeMeta1)) {
+      if (hasOrder(routeMeta2)) {
+        return routeMeta1.order - routeMeta2.order
       }
-      meta.component = importPrefix + file.path
     }
 
-    return meta
+    if (hasOrder(routeMeta2)) {
+      return 1
+    }
+
+    return 0
   })
+}
+
+function hasOrder(obj: unknown): obj is { order: number } {
+  return typeof obj === 'object' && obj !== null && hasOwnProperty(obj, 'order')
+}
+
+function filterDirectoryMeta(tree: PageMetaTree): PageMetaTree {
+  return filter(
+    tree,
+    meta => !meta.component?.endsWith('__meta__.md')
+  ) as PageMetaTree
 }
 
 function isOmittable(segment: string): boolean {
@@ -56,7 +106,6 @@ function isOmittable(segment: string): boolean {
 /**
  * - Remove `.md` from the last path
  * - Omit if the last segment is `index`
- * - Convert dynamic route to `:param` format
  */
 function toActualPath(segments: string[]): string[] {
   const lastIndex = segments.length - 1

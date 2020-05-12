@@ -1,4 +1,4 @@
-import { flatMap, flatten, forEach, map, sort, Tree } from '../src/tree'
+import { filter, flatMap, flatten, forEach, map, sort, Tree } from '../src/tree'
 
 interface File {
   name: string
@@ -143,6 +143,54 @@ describe('Tree', () => {
           { value: 1 },
           { value: 2 },
           { value: 3, children: [{ value: 1 }, { value: 2 }, { value: 3 }] }
+        ]
+      })
+    })
+  })
+
+  describe('#filter', () => {
+    it('should return an empty tree if no node matches', () => {
+      const tree: Tree<number> = {
+        value: 2,
+        children: [{ value: 4 }, { value: 7 }]
+      }
+      const actual = filter(tree, value => value % 3 === 0)
+      expect(actual).toBeNull()
+    })
+
+    it('should filter out any node not matching the given function', () => {
+      const tree: Tree<{ path: string; type: string }> = {
+        value: { path: 'guides', type: 'directory' },
+        children: [
+          {
+            value: { path: 'guides/2.md', type: 'file' }
+          },
+          {
+            value: { path: 'guides/1', type: 'directory' },
+            children: [
+              { value: { path: 'guides/1/__meta__.md', type: 'file' } },
+              { value: { path: 'guides/1/1.md', type: 'file' } },
+              { value: { path: 'guides/1/2.md', type: 'file' } },
+              { value: { path: 'guides/1/3.md', type: 'file' } }
+            ]
+          }
+        ]
+      }
+      const actual = filter(tree, value => !value.path.endsWith('__meta__.md'))
+      expect(actual).toStrictEqual({
+        value: { path: 'guides', type: 'directory' },
+        children: [
+          {
+            value: { path: 'guides/2.md', type: 'file' }
+          },
+          {
+            value: { path: 'guides/1', type: 'directory' },
+            children: [
+              { value: { path: 'guides/1/1.md', type: 'file' } },
+              { value: { path: 'guides/1/2.md', type: 'file' } },
+              { value: { path: 'guides/1/3.md', type: 'file' } }
+            ]
+          }
         ]
       })
     })

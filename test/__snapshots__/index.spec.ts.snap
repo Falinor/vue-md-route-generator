@@ -25,6 +25,9 @@ export default [
     name: 'foo',
     path: '/foo',
     redirect: { name: 'foo-index' },
+    meta: {
+      order: 1
+    },
     children: [
       {
         name: 'foo-bar',
@@ -61,6 +64,9 @@ export default [
     name: 'bar',
     path: '/bar',
     redirect: { name: 'bar-index' },
+    meta: {
+      order: 2
+    },
     children: [
       {
         name: 'bar-index',

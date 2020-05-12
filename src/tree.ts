@@ -2,17 +2,17 @@ export type Tree<T> = { value: T; children?: Tree<T>[] }
 
 type ForEachFunction<T> = (node: T) => void
 
-export function forEach<T = any>(
-  tree: Tree<T>,
-  fn: ForEachFunction<T>
-): Tree<T> {
-  fn(tree.value)
-  if (tree?.children?.length) {
-    tree.children.forEach(child => {
-      forEach(child, fn)
-    })
+export function forEach<T = any>(tree: Tree<T>, fn: ForEachFunction<T>): void {
+  const { value, children } = tree
+  fn(value)
+
+  if (!children) {
+    return
   }
-  return tree
+
+  children.forEach(child => {
+    forEach(child, fn)
+  })
 }
 
 type MapFunction<T, U> = (value: T, children?: Tree<T>[]) => U
@@ -21,13 +21,16 @@ export function map<T = any, U = any>(
   tree: Tree<T>,
   fn: MapFunction<T, U>
 ): Tree<U> {
-  const node: Tree<U> = {
-    value: fn(tree.value, tree.children)
+  const { value, children } = tree
+
+  if (!children) {
+    return { value: fn(value) }
   }
-  if (tree?.children?.length) {
-    node.children = tree.children.map(child => map(child, fn))
+
+  return {
+    value: fn(value, children),
+    children: children.map(child => map(child, fn))
   }
-  return node
 }
 
 export function flatten<T>(tree: Tree<T>): T[] {
@@ -59,4 +62,26 @@ export function sort<T = any>(tree: Tree<T>, fn: SortFunction<T>): Tree<T> {
     })
   }
   return tree
+}
+
+export type FilterFunction<T> = (value: T, children?: Tree<T>[]) => boolean
+
+export function filter<T = any>(
+  tree: Tree<T>,
+  fn: FilterFunction<T>
+): Tree<T> | null {
+  if (!fn(tree.value)) {
+    return null
+  }
+
+  if (!tree.children) {
+    return tree
+  }
+
+  return {
+    value: tree.value,
+    children: tree.children
+      .map(child => filter(child, fn))
+      .filter(v => v !== null) as Tree<T>[]
+  }
 }

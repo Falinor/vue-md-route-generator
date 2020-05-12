@@ -3,11 +3,6 @@ import { flatMap, Tree } from '../tree'
 
 export type PageMetaTree = Tree<PageMeta>
 
-export interface CreateRoutesOptions {
-  dynamic: boolean
-  chunkNamePrefix: string
-}
-
 function createChildrenRoute(children: PageMetaTree[]): string {
   return `children: [${children.map(createRoute).join(',')}],`
 }
