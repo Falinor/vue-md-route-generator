@@ -48,7 +48,18 @@ export function generateRoutes({
     })
     return createRoutes(meta, dynamicImport, chunkNamePrefix)
   })
-  const imports: string = routeStrings.map(rs => rs.imports).join('\n')
+  const rendererImport: string = `
+  import Vue from 'vue'
+  
+  Vue.component('renderer', resolve => {
+    setImmediate(() => resolve({
+      render: createElement => createElement('router-view')
+    }))
+  })
+  `
+  const imports: string = [rendererImport]
+    .concat(routeStrings.map(rs => rs.imports))
+    .join('\n')
   const routes: string = routeStrings.map(rs => rs.code).join(',\n')
   return prettier.format(`${imports}\n\nexport default [${routes}]`, {
     parser: 'babel',

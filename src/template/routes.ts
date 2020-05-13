@@ -24,7 +24,9 @@ function createRoute(meta: PageMetaTree): string {
     (meta.children?.[0] as PageMetaTree)
   const specifier = meta.value.component
     ? `component: ${meta.value.specifier},`
-    : `redirect: { name: '${redirect.value.name}' },`
+    : `component: Vue.component('renderer'),
+    redirect: { name: '${redirect.value.name}' },
+    `
 
   return `
   {

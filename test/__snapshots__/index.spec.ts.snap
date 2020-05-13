@@ -1,7 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Integration test 1`] = `
-"function FooBarBazOverview() {
+"import Vue from 'vue'
+
+Vue.component('renderer', resolve => {
+  setImmediate(() =>
+    resolve({
+      render: createElement => createElement('router-view')
+    })
+  )
+})
+
+function FooBarBazOverview() {
   return import(
     /* webpackChunkName: \\"foo-bar-baz-overview\\" */ '@/assets/foo/bar/baz/overview.md'
   )
@@ -24,6 +34,7 @@ export default [
   {
     name: 'foo',
     path: '/foo',
+    component: Vue.component('renderer'),
     redirect: { name: 'foo-index' },
     meta: {
       order: 1
@@ -32,11 +43,13 @@ export default [
       {
         name: 'foo-bar',
         path: '/foo/bar',
+        component: Vue.component('renderer'),
         redirect: { name: 'foo-bar-baz' },
         children: [
           {
             name: 'foo-bar-baz',
             path: '/foo/bar/baz',
+            component: Vue.component('renderer'),
             redirect: { name: 'foo-bar-baz-overview' },
             children: [
               {
@@ -63,6 +76,7 @@ export default [
   {
     name: 'bar',
     path: '/bar',
+    component: Vue.component('renderer'),
     redirect: { name: 'bar-index' },
     meta: {
       order: 2

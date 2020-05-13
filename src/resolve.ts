@@ -3,7 +3,6 @@ import isEmpty from 'lodash.isempty'
 import path from 'path'
 
 import { filter, map, sort, Tree } from './tree'
-import { hasOwnProperty } from 'tslint/lib/utils'
 
 export interface PageMeta {
   name: string
@@ -89,7 +88,7 @@ function sortByMeta(tree: PageMetaTree): PageMetaTree {
 }
 
 function hasOrder(obj: unknown): obj is { order: number } {
-  return typeof obj === 'object' && obj !== null && hasOwnProperty(obj, 'order')
+  return typeof obj === 'object' && obj !== null && obj.hasOwnProperty('order')
 }
 
 function filterDirectoryMeta(tree: PageMetaTree): PageMetaTree {
