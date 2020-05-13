@@ -3,11 +3,6 @@ import { flatMap, Tree } from '../tree'
 
 export type PageMetaTree = Tree<PageMeta>
 
-export interface CreateRoutesOptions {
-  dynamic: boolean
-  chunkNamePrefix: string
-}
-
 function createChildrenRoute(children: PageMetaTree[]): string {
   return `children: [${children.map(createRoute).join(',')}],`
 }
@@ -29,7 +24,9 @@ function createRoute(meta: PageMetaTree): string {
     (meta.children?.[0] as PageMetaTree)
   const specifier = meta.value.component
     ? `component: ${meta.value.specifier},`
-    : `redirect: { name: '${redirect.value.name}' },`
+    : `component: Vue.component('renderer'),
+    redirect: { name: '${redirect.value.name}' },
+    `
 
   return `
   {

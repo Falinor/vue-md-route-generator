@@ -47,7 +47,9 @@ Object {
   {
     name: 'guides',
     path: '/guides',
-    redirect: { name: 'guides-foo' },children: [
+    component: Vue.component('renderer'),
+    redirect: { name: 'guides-foo' },
+    children: [
   {
     name: 'guides-foo',
     path: 'foo',
@@ -74,7 +76,9 @@ Object {
   {
     
     path: '/foo',
-    redirect: { name: 'foo-index' },children: [
+    component: Vue.component('renderer'),
+    redirect: { name: 'foo-index' },
+    children: [
   {
     name: 'foo-index',
     path: '',

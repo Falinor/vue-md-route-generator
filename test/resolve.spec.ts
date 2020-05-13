@@ -13,6 +13,25 @@ title: Hello
 ---`
   }
 
+  if (path === 'guides/__meta__.md') {
+    return `---
+title: Directory metadata
+---`
+  }
+
+  if (path === 'guides/1/__meta__.md') {
+    return `---
+order: 1
+---`
+  }
+
+  const result = /\/(?<order>\d+)\.md$/.exec(path)
+  if (result && result.groups?.order) {
+    return `---
+order: ${result.groups.order}
+---`
+  }
+
   return ''
 }
 
@@ -45,5 +64,35 @@ describe('Route resolution', () => {
       path: 'meta.md',
       type: 'file'
     }
+  })
+
+  test('resolves directory meta', {
+    value: { path: 'guides', type: 'directory' },
+    children: [
+      {
+        value: { path: 'guides/__meta__.md', type: 'file' }
+      },
+      {
+        value: { path: 'guides/foo.md', type: 'file' }
+      }
+    ]
+  })
+
+  test('resolves routes in the correct order based on metadata', {
+    value: { path: 'guides', type: 'directory' },
+    children: [
+      {
+        value: { path: 'guides/2.md', type: 'file' }
+      },
+      {
+        value: { path: 'guides/1', type: 'directory' },
+        children: [
+          { value: { path: 'guides/1/__meta__.md', type: 'file' } },
+          { value: { path: 'guides/1/2.md', type: 'file' } },
+          { value: { path: 'guides/1/1.md', type: 'file' } },
+          { value: { path: 'guides/1/3.md', type: 'file' } }
+        ]
+      }
+    ]
   })
 })

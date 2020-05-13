@@ -1,5 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Route resolution resolves directory meta 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "value": Object {
+        "component": "@/assets/guides/foo.md",
+        "name": "guides-foo",
+        "path": "/guides/foo",
+        "pathSegments": Array [
+          "guides",
+          "foo",
+        ],
+        "specifier": "GuidesFoo",
+      },
+    },
+  ],
+  "value": Object {
+    "component": null,
+    "name": "guides",
+    "path": "/guides",
+    "pathSegments": Array [
+      "guides",
+    ],
+    "routeMeta": Object {
+      "title": "Directory metadata",
+    },
+    "specifier": "Guides",
+  },
+}
+`;
+
 exports[`Route resolution resolves route meta 1`] = `
 Object {
   "value": Object {
@@ -54,6 +85,102 @@ Object {
           "baz",
         ],
         "specifier": "GuidesBaz",
+      },
+    },
+  ],
+  "value": Object {
+    "component": null,
+    "name": "guides",
+    "path": "/guides",
+    "pathSegments": Array [
+      "guides",
+    ],
+    "specifier": "Guides",
+  },
+}
+`;
+
+exports[`Route resolution resolves routes in the correct order based on metadata 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "value": Object {
+            "component": "@/assets/guides/1/1.md",
+            "name": "guides-1-1",
+            "path": "/guides/1/1",
+            "pathSegments": Array [
+              "guides",
+              "1",
+              "1",
+            ],
+            "routeMeta": Object {
+              "order": 1,
+            },
+            "specifier": "Guides11",
+          },
+        },
+        Object {
+          "value": Object {
+            "component": "@/assets/guides/1/2.md",
+            "name": "guides-1-2",
+            "path": "/guides/1/2",
+            "pathSegments": Array [
+              "guides",
+              "1",
+              "2",
+            ],
+            "routeMeta": Object {
+              "order": 2,
+            },
+            "specifier": "Guides12",
+          },
+        },
+        Object {
+          "value": Object {
+            "component": "@/assets/guides/1/3.md",
+            "name": "guides-1-3",
+            "path": "/guides/1/3",
+            "pathSegments": Array [
+              "guides",
+              "1",
+              "3",
+            ],
+            "routeMeta": Object {
+              "order": 3,
+            },
+            "specifier": "Guides13",
+          },
+        },
+      ],
+      "value": Object {
+        "component": null,
+        "name": "guides-1",
+        "path": "/guides/1",
+        "pathSegments": Array [
+          "guides",
+          "1",
+        ],
+        "routeMeta": Object {
+          "order": 1,
+        },
+        "specifier": "Guides1",
+      },
+    },
+    Object {
+      "value": Object {
+        "component": "@/assets/guides/2.md",
+        "name": "guides-2",
+        "path": "/guides/2",
+        "pathSegments": Array [
+          "guides",
+          "2",
+        ],
+        "routeMeta": Object {
+          "order": 2,
+        },
+        "specifier": "Guides2",
       },
     },
   ],
