@@ -77,6 +77,7 @@ function sortByMeta(tree: PageMetaTree): PageMetaTree {
       if (hasOrder(routeMeta2)) {
         return routeMeta1.order - routeMeta2.order
       }
+      return -1
     }
 
     if (hasOrder(routeMeta2)) {

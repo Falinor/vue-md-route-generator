@@ -1,11 +1,10 @@
-import fs from 'fs'
 import directoryTree, { DirectoryTree } from 'directory-tree'
+import fs from 'fs'
 import { basename, dirname, isAbsolute, join } from 'path'
-
-import { createRoutes, RouteString } from './template/routes'
-import { resolveRoutePaths } from './resolve'
-import { FileTree } from './resolve'
 import prettier from 'prettier'
+
+import { FileTree, resolveRoutePaths } from './resolve'
+import { createRoutes, RouteString } from './template/routes'
 
 export interface GenerateConfig {
   folders: string[]
@@ -52,7 +51,7 @@ export function generateRoutes({
   import Vue from 'vue'
   
   Vue.component('renderer', resolve => {
-    setImmediate(() => resolve({
+    setTimeout(() => resolve({
       render: createElement => createElement('router-view')
     }))
   })
