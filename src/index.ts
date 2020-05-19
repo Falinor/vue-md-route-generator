@@ -39,7 +39,10 @@ export function generateRoutes({
   chunkNamePrefix = ''
 }: GenerateConfig): string {
   const routeStrings: RouteString[] = folders.map(folder => {
-    const dirTree = directoryTree(folder, { extensions: /\.md$/ })
+    const dirTree = directoryTree(folder, {
+      extensions: /\.md$/,
+      normalizePath: true
+    })
     const pathTree = toPathTree(dirTree, basename(folder))
 
     const meta = resolveRoutePaths(pathTree, importPrefix, file => {
