@@ -1,6 +1,6 @@
 {
   "name": "vue-md-route-generator",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "Falinor",
   "description": "Vue Router route generator based on markdown arborescence",
   "keywords": [
